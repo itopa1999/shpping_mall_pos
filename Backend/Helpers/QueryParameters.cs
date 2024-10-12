@@ -48,8 +48,17 @@ namespace Backend.Helpers
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         
-    }
+    }   
 
+    public class UserSalesQuery
+    {
+        public DateTime DateMin { get; set; }
+        public DateTime DateMax { get; set; }
+        public decimal? PriceMin { get; set; }
+        public decimal? PriceMax { get; set; }
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+    }
 
 
 }

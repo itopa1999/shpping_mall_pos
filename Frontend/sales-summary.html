@@ -78,6 +78,29 @@ label{
   color: #4154f1;
   font-weight: 700;
 }
+.card-custom {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        text-align: center;
+      }
+      .icon-bg {
+        background-color: #2d1f6d;
+        color: white;
+        border-radius: 50%;
+        padding: 15px;
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+      .card-title {
+        font-size: 1.2rem;
+        color: #6c757d;
+      }
+      .value {
+        font-size: 2.5rem;
+        font-weight: bold;
+      }
   </style>
 
 
@@ -254,6 +277,29 @@ label{
                         <button class="btn btn-warning btn-sm" data-type="monthly" id="viewVisual" data-bs-toggle="modal" data-bs-target="#visualReport"><i class="bi bi-bar-chart"></i> Generate Monthly Report</button>
                     </div>
 
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="card card-custom">
+                      <!-- Bootstrap Icon -->
+                      <div class="icon-bg mx-auto">
+                        <i class="bi bi-people-fill"></i>
+                      </div>
+                      <h5 class="card-title">Total Products Sold Price</h5>
+                      <div class="value" id="totalProductSoldPrice"></div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="card card-custom">
+                      <!-- Bootstrap Icon -->
+                      <div class="icon-bg mx-auto">
+                        <i class="bi bi-people-fill"></i>
+                      </div>
+                      <h5 class="card-title">Total Sales</h5>
+                      <div class="value" id="totalSales"></div>
+                    </div>
+                  </div>
                 </div>
    
                 <!-- Product List Table -->

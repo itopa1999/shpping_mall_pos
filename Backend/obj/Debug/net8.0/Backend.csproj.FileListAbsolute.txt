@@ -141,3 +141,4 @@ C:\Users\FMY-381\Desktop\projects\POS\Backend\obj\Debug\net8.0\Backend.genruntim
 C:\Users\FMY-381\Desktop\projects\POS\Backend\obj\Debug\net8.0\ref\Backend.dll
 C:\Users\FMY-381\Desktop\projects\POS\Backend\bin\Debug\net8.0\CsvHelper.dll
 C:\Users\FMY-381\Desktop\projects\POS\Backend\bin\Debug\net8.0\ExcelDataReader.dll
+C:\Users\FMY-381\Desktop\projects\POS\Backend\obj\Debug\net8.0\Backend.sourcelink.json

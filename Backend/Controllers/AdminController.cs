@@ -45,8 +45,7 @@ namespace Backend.Controllers
 
 
         [HttpGet("admin/dashboard")]
-        //[Authorize]
-        //[Authorize(Policy = "IsAdmin")]
+        [Authorize]
         public async Task<IActionResult> AdminDashboard()
         {
             var products = await _context.Products.ToListAsync();
@@ -96,8 +95,7 @@ namespace Backend.Controllers
 
 
         [HttpPost("create/salesAgent/")]
-        // [Authorize]
-        // [Authorize(Policy = "IsAdmin")]
+        [Authorize]
         public async Task<IActionResult> CreateSalesAgent([FromBody] CreateSalesDto createSalesDto){
             if (!ModelState.IsValid){
                 return StatusCode(400, new{message=ModelState});
@@ -130,7 +128,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost("create/product")]
-        // [Authorize]
+        [Authorize]
         // [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
         {
@@ -164,6 +162,7 @@ namespace Backend.Controllers
 
 
         [HttpGet("list/products")]
+        [Authorize]
         public async Task<IActionResult> ListProducts([FromQuery] ProductQuery query)
         {
             var products = await _adminRepo.GetAllProductsAsync(query);
@@ -172,6 +171,7 @@ namespace Backend.Controllers
         }
 
         [HttpPut("update/product/{id:int}")]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductsDto productsDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -205,18 +205,21 @@ namespace Backend.Controllers
 
 
         [HttpGet("index/product/items")]
+        [Authorize]
         public async Task<IActionResult> GetIndexProductItems([FromQuery] IndexProductQuery query){
             var itemsProduct = await _adminRepo.GetIndexProductItemsAsync(query);
             return StatusCode(200, itemsProduct);
         }
 
         [HttpGet("index/recent/product/items")]
+        [Authorize]
         public async Task<IActionResult> GetIndexRecentProductItems(){
             var recentProduct = await _adminRepo.GetIndexRecentProductItemsAsync();
             return StatusCode(200, recentProduct);
         }
 
         [HttpPost("upload/product")]
+        [Authorize]
         public async Task<IActionResult> UploadProduct(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -426,15 +429,21 @@ namespace Backend.Controllers
         }
 
         [HttpGet("sales/summary")]
+        [Authorize]
         public async Task<IActionResult> GetSaleSummary([FromQuery] SalesProductQuery query){
             var sales = await _adminRepo.GetSalesProductItemsAsync(query);
             var totalSales = await _context.Sales.CountAsync();
+            var totalQuery = sales.Count;
+            var totalPrice = sales.Sum(x=>x.TotalPrice);
             
-            
-            return StatusCode(200, new{sales=sales, totalSales=totalSales});
+            var SkipNumber = (query.PageNumber - 1) * query.PageSize;
+            var querySales =  sales.Skip(SkipNumber).Take(query.PageSize);
+
+            return StatusCode(200, new{sales=querySales, totalSales=totalSales,totalQuery=totalQuery,totalPrice=totalPrice});
         }
 
         [HttpGet("sales/visualization/data")]
+        [Authorize]
         public async Task<IActionResult> SalesVisualData(){
             var sales = await _context.Sales
             .Select(x=>x.ToListSalesDto())
@@ -523,6 +532,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("sales/details/{id:int}")]
+        [Authorize]
         public async Task<IActionResult> SalesDetails([FromRoute] int id){
             var salesDetails = await _adminRepo.GetSalesProductDetailsAsync(id);
             return StatusCode(200, salesDetails);
@@ -530,6 +540,7 @@ namespace Backend.Controllers
 
 
         [HttpGet("sales")]
+        [Authorize]
         public async Task<IActionResult> GetSalesWithProducts()
         {
             var sales = await _context.SaleProducts
@@ -554,27 +565,27 @@ namespace Backend.Controllers
             return Ok(sales);
         }
 
-        [HttpGet("get/username/{username}")]
-        public async Task<IActionResult> GetUsername([FromRoute] string username)
-        {
-            var Username = await _userManager.Users.FirstOrDefaultAsync(x=>x.UserName == username);
-            {
-                if (Username == null){
-                    return StatusCode(400, new{message="UserName not Found"});
-                };
-            }
-            var otp = await _context.Otps.FirstOrDefaultAsync(x=>x.AppUser.UserName == Username.UserName);
-            
-            return StatusCode(200, new{message=otp?.Question});
-            
+        [HttpGet("user/profile")]
+        [Authorize]
+        // public async Task<IActionResult> GetUserProfile([FromQuery] UserSalesQuery query){
+        public async Task<IActionResult> GetUserProfile(){
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            // var sales = await _adminRepo.GetUserProfileAsync(query, userId);
+            var sales = _context.Sales
+            .Where(x=>x.AppUserId == userId);
+            var totalSales =await sales.CountAsync();
+            var totalPrice =await sales.SumAsync(x=>x.GrandPrice);
+            return Ok(new{totalSales=totalSales,totalPrice=totalPrice,Name = user.Name,Username = user.UserName});
+
         }
 
-        // [HttpPost("get/user/answer/")]
-        // public async task
+       
    
 
         [HttpGet("get/users/list")]
-        public async Task<IActionResult> GetUserLIst(){
+        [Authorize]
+        public async Task<IActionResult> GetUserList(){
             var users = await _context.Users
             .Select(x=>x.ToUserDto())
             .ToListAsync();

@@ -213,6 +213,21 @@ namespace Backend.Controllers
                 });
         }
 
+        [HttpGet("get/username/{username}")]
+        public async Task<IActionResult> GetUsername([FromRoute] string username)
+        {
+            var Username = await _userManager.Users.FirstOrDefaultAsync(x=>x.UserName == username);
+            {
+                if (Username == null){
+                    return StatusCode(400, new{message="UserName not Found"});
+                };
+            }
+            var otp = await _context.Otps.FirstOrDefaultAsync(x=>x.AppUser.UserName == Username.UserName);
+            
+            return StatusCode(200, new{message=otp?.Question});
+            
+        }
+
 
 
 

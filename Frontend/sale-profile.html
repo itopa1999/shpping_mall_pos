@@ -28,29 +28,7 @@
 
   <link href="assets/css/style.css" rel="stylesheet">
   <style>
-    .card-custom {
-        background-color: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        text-align: center;
-      }
-      .icon-bg {
-        background-color: #2d1f6d;
-        color: white;
-        border-radius: 50%;
-        padding: 15px;
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
-      .card-title {
-        font-size: 1.2rem;
-        color: #6c757d;
-      }
-      .value {
-        font-size: 2.5rem;
-        font-weight: bold;
-      }
+    
   </style>
 </head>
 
@@ -174,65 +152,102 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Products</h1>
+      <h1>My Profile</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Products</li>
+          <li class="breadcrumb-item active">My Profile</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Products <span>| List</span></h5>
-                <form id="filterForm">
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <label for="dateRange">Date Range:</label>
-                        <input type="date" class="form-control" id="startDate" placeholder="Start Date">
-                        <input type="date" class="form-control mt-2" id="endDate" placeholder="End Date">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="Availabilty">SalesAgent:</label>
-                        <select name="" id="saleAgent" class="form-control">
-                          <option value="">Select SaleAgent</option>
-                        </select>
-                      <button class="btn btn-primary mt-2 btn-sm" type="submit">Filter</button>
-                      </div>
-                    
-                </div>
-              </form>
-            </div>
-        </div>
-        <div class="row">
-        <div class="col-lg-4">
-          <div class="card card-custom">
-            <!-- Bootstrap Icon -->
-            <div class="icon-bg mx-auto">
-              <i class="bi bi-people-fill"></i>
-            </div>
-            <h5 class="card-title">Total Products Sold Price</h5>
-            <div class="value" id="totalProductSoldPrice"></div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card card-custom">
-            <!-- Bootstrap Icon -->
-            <div class="icon-bg mx-auto">
-              <i class="bi bi-people-fill"></i>
-            </div>
-            <h5 class="card-title">Total Sales</h5>
-            <div class="value" id="totalSales"></div>
-          </div>
-        </div>
-  
-  
-  
+    <section class="section dashboard profile">
        
+        <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                </li>
+
+              </ul>
+              <div class="tab-content pt-2">
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                    
+                    <h5 class="card-title">Profile Details</h5>
   
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">Name</div>
+                      <div class="col-lg-9 col-md-8" id="fullName"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 label ">Username</div>
+                        <div class="col-lg-9 col-md-8" id="username"></div>
+                      </div>
   
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Total Sales</div>
+                      <div class="col-lg-9 col-md-8" id="totalSales"></div>
+                    </div>
+  
+                    <div class="row">
+                      <div class="col-lg-3 col-md-5 label">Total Product Sale Price</div>
+                      <div class="col-lg-9 col-md-7" id="totalProductSoldPrice"></div>
+                    </div>
+  
+                    
+  
+                  </div>
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                    <!-- Change Password Form -->
+                    <form class="changePassword-form needs-validation" novalidate>
+  
+                      <div class="row mb-3">
+                        <div class="input-group has-validation">
+                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                        <div class="col-md-4 col-lg-4">
+                          <input name="oldpassword" type="password" class="form-control" id="currentPassword" required>
+                          <div class="invalid-feedback">Please enter Current Password.</div>
+                      </div>
+                        </div>
+                      </div>
+  
+                      <div class="row mb-3">
+                        <div class="input-group has-validation">
+                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                        <div class="col-md-4 col-lg-4">
+                          <input name="password1" type="password" class="form-control" id="newPassword" required>
+                          <div class="invalid-feedback">Please enter Password.</div>
+                      </div>
+                        </div>
+                      </div>
+  
+                      <div class="row mb-3">
+                        <div class="input-group has-validation">
+                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                        <div class="col-md-4 col-lg-4">
+                          <input name="password2" type="password" class="form-control" id="renewPassword" required>
+                          <div class="invalid-feedback">Please enter confirm Password.</div>
+                      </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-12 text-center">
+                        <button class="btn btn-primary" type="submit"><span class="" id="login-text">Change Password <i class="bi bi-arrow-right"></i>
+                        </span> <div id="spinner" class="spinner-border text-white d-none"></div></button>
+                      </div>
+                    </form><!-- End Change Password Form -->
+  
+                  </div>
+
+              </div>
+            </div>
         </div>
       </section>
 

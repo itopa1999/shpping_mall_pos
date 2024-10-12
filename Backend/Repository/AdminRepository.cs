@@ -170,10 +170,36 @@ namespace Backend.Repository
             var salesDtos = sales
                 .Select(x => x.ToListSalesDto());
 
-            var SkipNumber = (query.PageNumber - 1) * query.PageSize;
-            return await salesDtos.Skip(SkipNumber).Take(query.PageSize).ToListAsync();
+            
+            return await salesDtos.ToListAsync();
 
         }
+
+        public async Task<List<ListSalesDto>?> GetUserProfileAsync(UserSalesQuery query, string id)
+        {
+            var sales = _context.Sales
+            .OrderByDescending(x=>x.CreatedAt)
+            .Include(x=>x.AppUser)
+            .AsQueryable();
+
+            sales = sales.Where(x => x.AppUserId == id);
+
+            if (query.DateMin != default(DateTime))
+            {
+                sales = sales.Where(x => x.CreatedAt >= query.DateMin);
+            }
+            if (query.DateMax != default(DateTime))
+            {
+                sales = sales.Where(x => x.CreatedAt <= query.DateMax);
+            }
+            var salesDtos = sales
+                .Select(x => x.ToListSalesDto());
+
+            var SkipNumber = (query.PageNumber - 1) * query.PageSize;
+            return await salesDtos.Skip(SkipNumber).Take(query.PageSize).ToListAsync();
+                
+        }
+
 
         public async Task<Product?> UpdateProductAsync( Product product, UpdateProductsDto productsDto)
         {

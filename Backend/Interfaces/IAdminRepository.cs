@@ -16,6 +16,7 @@ namespace Backend.Interfaces
         Task<List<ListRecentSaleDto>> GetIndexRecentProductItemsAsync();
         Task<List<ListSalesDto>> GetSalesProductItemsAsync(SalesProductQuery query);
         Task<SalesProductDetailsDto?> GetSalesProductDetailsAsync(int id);
+        Task<List<ListSalesDto>?> GetUserProfileAsync(UserSalesQuery query, string id);
         
 
         

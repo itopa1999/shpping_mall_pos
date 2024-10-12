@@ -92,6 +92,15 @@ namespace Backend.Dtos
     }
 
 
+    public class UserSalesProfileDto
+    {
+        public int SaleId { get; set; }
+        public string? AppUserId { get; set; }
+        public List<SalesProductListDto>? Products {get; set;} = new List<SalesProductListDto>();
+       
+    }
+
+
 
 
 

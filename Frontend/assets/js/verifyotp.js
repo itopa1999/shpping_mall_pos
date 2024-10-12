@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-    const PasswordMessage = localStorage.getItem('passwordMessage');
-    const passwordUsername = localStorage.getItem('passwordUsername');
+    const PasswordMessage = localStorage.getItem('password_message');
+    const passwordUsername = localStorage.getItem('password_username');
     if (PasswordMessage !== null && PasswordMessage !== 'undefined'){
         document.getElementById('success-alert').classList.remove("d-none");
         document.getElementById('success-message').innerHTML = PasswordMessage;
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loginText.classList.add('d-none');
     
         // Send the login request
-        fetch('http://localhost:5087/auth/api/verify/otp/', {
+        fetch('http://localhost:5297/auth/api/verify/otp', {
             method: 'POST',
             body: JSON.stringify(Object.fromEntries(formData.entries())), // Convert form data to JSON
             headers: {
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (response.ok) {
                 return response.json().then(data => {
-                localStorage.removeItem('passwordUsername');
-                localStorage.removeItem('passwordMessage');
+                localStorage.removeItem('password_username');
+                localStorage.removeItem('password_message');
                 alert(data.message)
                 window.location.href = 'login.html';
     
