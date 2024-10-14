@@ -46,6 +46,7 @@ namespace Backend.Controllers
 
         [HttpGet("admin/dashboard")]
         [Authorize]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> AdminDashboard()
         {
             var products = await _context.Products.ToListAsync();
@@ -96,6 +97,7 @@ namespace Backend.Controllers
 
         [HttpPost("create/salesAgent/")]
         [Authorize]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> CreateSalesAgent([FromBody] CreateSalesDto createSalesDto){
             if (!ModelState.IsValid){
                 return StatusCode(400, new{message=ModelState});
@@ -112,6 +114,14 @@ namespace Backend.Controllers
                 if (userModel.Succeeded){
                     var role = await _userManager.AddToRoleAsync(user, "SALES");
                     if (role.Succeeded){
+                        var otp = new Otp{
+                        AppUserId = user.Id,
+                        Question = createSalesDto.Question,
+                        Answer= createSalesDto.Answer,
+                        Token = _token.GenerateToken()
+                        };
+                        await _context.Otps.AddAsync(otp);
+                        await _context.SaveChangesAsync();
                         // var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                         // var admin = await _userManager.FindByIdAsync(userId);
                         // var action = $"Added a Student: {user.FirstName} {user.LastName}";
@@ -129,7 +139,7 @@ namespace Backend.Controllers
 
         [HttpPost("create/product")]
         [Authorize]
-        // [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -172,6 +182,7 @@ namespace Backend.Controllers
 
         [HttpPut("update/product/{id:int}")]
         [Authorize]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductsDto productsDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -191,7 +202,7 @@ namespace Backend.Controllers
             {
                 return StatusCode(400, new { message = "product with this Id not found." });
             }
-            if (existingProduct.Name == productsDto.Name && existingProduct.Id != id)
+            if (existingProduct.Name == productsDto.Name)
             {
                 return StatusCode(400, new { message = "Name already exists" });
             }
@@ -220,6 +231,7 @@ namespace Backend.Controllers
 
         [HttpPost("upload/product")]
         [Authorize]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> UploadProduct(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -413,12 +425,35 @@ namespace Backend.Controllers
 
                 await _context.SaleProducts.AddAsync(saleProduct);
 
+                var recentsale = await _context.RecentSales.FirstOrDefaultAsync(x => x.ProductID == product.Id);
 
-                var recentSales = new RecentSale{
-                    ProductID = product.Id
-                };
-                await _context.RecentSales.AddAsync(recentSales);
-                
+                if (recentsale == null)
+                {
+                    var recentSales = new RecentSale
+                    {
+                        ProductID = product.Id
+                    };
+                    await _context.RecentSales.AddAsync(recentSales);
+
+                    await _context.SaveChangesAsync();
+
+                    var recentSalesCount = await _context.RecentSales.CountAsync();
+                    if (recentSalesCount > 10)
+                    {
+                        // Find the oldest record(s) and remove it
+                        var oldestRecentSale = await _context.RecentSales
+                            .OrderBy(x => x.Id)
+                            .FirstOrDefaultAsync();
+
+                        if (oldestRecentSale != null)
+                        {
+                            _context.RecentSales.Remove(oldestRecentSale);
+                            await _context.SaveChangesAsync();
+
+                        }
+                    }
+                }
+                                
 
                 product.Stock -= item.Quantity;
             }
@@ -444,6 +479,7 @@ namespace Backend.Controllers
 
         [HttpGet("sales/visualization/data")]
         [Authorize]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> SalesVisualData(){
             var sales = await _context.Sales
             .Select(x=>x.ToListSalesDto())
@@ -578,6 +614,17 @@ namespace Backend.Controllers
             var totalPrice =await sales.SumAsync(x=>x.GrandPrice);
             return Ok(new{totalSales=totalSales,totalPrice=totalPrice,Name = user.Name,Username = user.UserName});
 
+        }
+
+        [HttpGet("list/sales/users")]
+        [Authorize]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> ListUsers()
+        {
+            var users = await _userManager.Users.Where(x=>x.IsSales == true)
+            .Select(x=>x.ToUserDto())
+                .ToListAsync();
+            return Ok(new {users = users});
         }
 
        

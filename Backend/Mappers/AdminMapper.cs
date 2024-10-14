@@ -47,7 +47,9 @@ namespace Backend.Mappers
         public static UserDto ToUserDto(this AppUser appUser){
             return new UserDto{
                 Id = appUser.Id,
-                Name = appUser.Name
+                Name = appUser.Name,
+                Username = appUser.UserName
+                
             };
         }
 

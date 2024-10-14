@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     return '₦' + value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+function formatCurrency1(value) {
+    if (value === undefined || value === null) {
+        return '₦0.00'; // or any default value you'd prefer
+    }
+    return '₦' + value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
   // Reset previous messages
       errorAlert.classList.add('d-none');
       errorMessage.innerHTML = '';
@@ -101,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const rowHtml = `
             <tr data-id="${id}">
             <td>${id}</td>
-            <td>${name}</td>
+            <td class="name">${name}</td>
             <td class="text-primary in-stock" data-in-stock="${stock}"><b id="stock${id}">${stock}</b></td>
             <td class="product-price">${price.toFixed(2)}</td>
             <td>
@@ -266,13 +272,20 @@ function updateStockColor(stockElement) {
   
 
   document.querySelectorAll('.btn-primary').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(event) {
+        const clickedButton = this; 
+        const buttonId = clickedButton.id;
+
+        console.log(`Button clicked: ${buttonId}`);
+
         let cartData = [];
         let grandPrice = 0;
         const tableRows = document.querySelectorAll('tr[data-id]'); // Select all rows with data-id attribute
-
+        
         tableRows.forEach(row => {
             const id = row.getAttribute('data-id');
+            const productName = row.querySelector('.name').innerText;
+            const productPrice = row.querySelector('.product-price').innerText;
             const quantity = row.querySelector(`#quantity${id}`).value;
             const total = row.querySelector(`#total${id}`).innerText;
             const totalConvert = parseFloat(row.querySelector('.total-price').innerText.replace(/[^0-9.-]+/g,"")) || 0;
@@ -281,15 +294,18 @@ function updateStockColor(stockElement) {
             cartData.push({
                 ProductId : id,
                 Quantity : quantity,
-                TotalPrice : total
+                TotalPrice : total,
+                productName : productName,
+                productPrice : productPrice,
             });
             grandPrice += totalConvert;
             
         });
         console.log(cartData);
         
+        
         let customerName = document.getElementById('customerName').value;
-        var customerNameInput = document.getElementById("customerName");
+        
         if (grandPrice === 0.00) {
           alert("Please select a product to purchase")
           return;
@@ -302,6 +318,7 @@ function updateStockColor(stockElement) {
         const submitText = document.getElementById('submit-text');
         spinner.classList.remove('d-none');
         submitText.classList.add('d-none');
+        
 
         fetch(`http://localhost:5297/admin/api/make/sales/${customerName}/${grandPrice}`, {
           method: 'POST',
@@ -316,11 +333,14 @@ function updateStockColor(stockElement) {
             if (response.status===200) {
                 return response.json().then(data => {
                 const container = document.querySelector('.cart-table');
+                var customerNameInput = document.getElementById("customerName");
                 container.innerHTML = '';
-                customerNameInput = '';
+                customerNameInput.value = '';
                 successMessage.innerText = data.message;
                 successAlert.classList.remove('d-none');
-
+                if (buttonId === 'purchasePrint') {
+                    printReceipt(cartData,customerName,grandPrice);
+                }
                 })
             } else {
               return response.json().then(data => {
@@ -339,7 +359,31 @@ function updateStockColor(stockElement) {
     });
 });
   
+function printReceipt(cartData2,customerName,grandPrice) {
+    const cartBody = document.getElementById('cart-body');
+    cartBody.innerHTML = '';
+    if (cartData2.length === 0) {
+        const emptyRow = `<tr><td colspan="4" class="text-center">No items in cart</td></tr>`;
+        cartBody.innerHTML = emptyRow;
+        return;
+    }
+    document.getElementById('grand-total').innerHTML = formatCurrency1(grandPrice);
+    document.getElementById('customerName2').innerHTML = customerName +"<br>";
 
+    cartData2.forEach(item => {
+        const rowHtml = `
+            <tr data-id="${item.ProductId}">
+                <td>${item.productName}</td>
+                <td>${item.productPrice}</td>
+                <td>${item.Quantity}</td>               
+                <td>${item.TotalPrice}</td>
+            </tr>
+        `;
+        cartBody.innerHTML += rowHtml; // Append new row
+    });
+
+    cartBody.innerHTML = '';
+}
 
 
 })

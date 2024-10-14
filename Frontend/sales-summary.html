@@ -74,7 +74,7 @@ a:hover {
     opacity: 0.5; /* Makes the button look disabled */
     cursor: not-allowed; /* Changes the cursor to indicate it's disabled */
 }
-label{
+label, .label{
   color: #4154f1;
   font-weight: 700;
 }
@@ -213,6 +213,13 @@ label{
       </li>
 
       <li class="nav-item">
+        <a class="nav-link collapsed" href="users.html" >
+            <i class="bi bi-people"></i>
+          <span>Users</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link collapsed" href="#!" id="logoutBtn">
             <i class="bi bi-box-arrow-left"></i>
           <span>Sign Out</span>
@@ -235,7 +242,7 @@ label{
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
+    <section class="section dashboard profile">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title"><i class="bi bi-graph-up"></i> Summary Sales <span>| List</span></h5>
@@ -336,30 +343,34 @@ label{
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="title">Update a Product</h5>
+            <h5 class="modal-title" id="title">Receipt Details</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <h5 class="card-title">Receipt Details</h5>
 
-            <div class="row">
+            <div class="row mt-2">
               <div class="col-lg-3 col-md-4 label">Receipt ID</div>
-              <div class="col-lg-9 col-md-8"></div>
+              <div class="col-lg-9 col-md-8" id="receiptID"></div>
             </div>
-
-            <div class="row">
+            <div class="row mt-2">
+              <div class="col-lg-3 col-md-4 label">SalesAgent</div>
+              <div class="col-lg-9 col-md-8" id="receiptSaleName"></div>
+            </div>
+            
+            <div class="row mt-2">
               <div class="col-lg-3 col-md-4 label ">Customer Name</div>
-              <div class="col-lg-9 col-md-8"></div>
+              <div class="col-lg-9 col-md-8" id="receiptName"></div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
               <div class="col-lg-3 col-md-4 label">Grand Price</div>
-              <div class="col-lg-9 col-md-8"></div>
+              <div class="col-lg-9 col-md-8" id="receiptPrice"></div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
               <div class="col-lg-3 col-md-4 label">CreatedAt</div>
-              <div class="col-lg-9 col-md-8"></div>
+              <div class="col-lg-9 col-md-8" id="receiptDate"></div>
             </div>
 
             <div class="table-responsive">
@@ -384,7 +395,7 @@ label{
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-primary btn-sm" id="downloaddf"><i class="bi bi-printer"></i> Print Receipt</button>
+            <button class="btn btn-primary btn-sm" id="printReceipt"><i class="bi bi-printer"></i> Print Receipt</button>
           </div>
         </div>
     </div>
@@ -420,6 +431,41 @@ label{
       </div>
     </div>
   </div>
+
+  <div class="receipt-container" style="display: none;">
+    <!-- Receipt Header -->
+    <div class="receipt-header mb-3 mt-2">
+        <h2>StaPos</h2>
+        <p>123 Main Street</p>
+        <p>Lagos, Nigeria</p>
+        <p>Phone: +234 123 4567</p>
+    </div>
+
+    <!-- Table for products -->
+    <table class="table" id="cart-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price (₦)</th>
+                <th>Qty</th>
+                <th>Total (₦)</th>
+            </tr>
+        </thead>
+        <tbody id="cart-body">
+      </tbody>
+    </table>
+
+
+    <!-- Total Section -->
+    <div class="total">
+      <p>Grand Total: <span id="grand-total">₦0.00</span></p>
+  </div>
+
+    <!-- Footer (Thank you message) -->
+    <div class="receipt-footer">
+      <p><span id="customerName2"> <br></span>Thank you for shopping with us!</p>
+  </div>
+</div>
 
 
   </main><!-- End #main -->

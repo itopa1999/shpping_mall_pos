@@ -139,7 +139,6 @@ fetch('http://localhost:5297/admin/api/get/users/list', {
                 });
             }
         }).then(data => {
-            console.log(data)
             document.getElementById('totalProductSoldPrice').innerHTML= formatCurrency(data.totalPrice);
             document.getElementById('totalSales').innerHTML= data.totalQuery;
             const tableBody = document.querySelector('.table-container'); // Target table body
@@ -204,6 +203,7 @@ fetch('http://localhost:5297/admin/api/get/users/list', {
 
     const updateModal = document.getElementById('UpdateModel');
     updateModal.addEventListener('show.bs.modal', event => {
+        
         const button = event.relatedTarget; // Button that triggered the modal
         const id = button.getAttribute('data-id');
         const url = `http://localhost:5297/admin/api/sales/details/${id}`;
@@ -224,7 +224,13 @@ fetch('http://localhost:5297/admin/api/get/users/list', {
                 });
             }
         }).then(data => {
-            console.log(data)
+            
+            document.getElementById('receiptID').innerHTML = data.Id ;
+            document.getElementById('receiptSaleName').innerHTML = data.SalesAgent;
+            document.getElementById('receiptName').innerHTML = data.CustomerName;
+            document.getElementById('receiptPrice').innerHTML = formatCurrency1(data.TotalPrice);
+            document.getElementById('receiptDate').innerHTML = new Date(data.CreatedAt).toLocaleString() ;
+            printReceipt(data.SalesProduct, data.CustomerName, data.TotalPrice)
             const tableBody = document.querySelector('.cart-table'); // Target table body
             tableBody.innerHTML = '';
             if (data.SalesProduct.length === 0) {
@@ -385,7 +391,34 @@ fetch('http://localhost:5297/admin/api/get/users/list', {
                 });
             });
             
+    function printReceipt(data, customerName, grandPrice){
+    console.log(data)
+    const cartBody = document.getElementById('cart-body');
+    cartBody.innerHTML = '';
+    if (data.length === 0) {
+        const emptyRow = `<tr><td colspan="4" class="text-center">No items in cart</td></tr>`;
+        cartBody.innerHTML = emptyRow;
+        return;
+    }
+    document.getElementById('grand-total').innerHTML = formatCurrency1(grandPrice);
+    document.getElementById('customerName2').innerHTML = customerName +"<br>";
 
+    data.forEach(item => {
+        const rowHtml = `
+            <tr data-id="${item.ProductId}">
+                <td>${item.ProductName}</td>
+                <td>${item.ProductPrice.toFixed(2)}</td>
+                <td>${item.Quality}</td>               
+                <td>${item.TotalPrice.toFixed(2)}</td>
+            </tr>
+        `;
+        cartBody.innerHTML += rowHtml; // Append new row
+    });
+
+    // cartBody.innerHTML = '';
+}
+                
+   
 
 
 

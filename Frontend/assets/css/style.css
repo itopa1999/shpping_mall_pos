@@ -1213,3 +1213,71 @@ h6 {
   from {top: 0; opacity: 0;}
   to {top: 80px; opacity: 1;}
 }
+
+
+.receipt-container {
+  font-family: Arial, sans-serif;
+  width: 80mm; /* Typical thermal printer paper size */
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid black; /* Border for receipt boundaries */
+  background-color: inherit;
+}
+
+.receipt-container .receipt-header h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.receipt-container .receipt-header p {
+  font-size: 12px;
+  margin: 0;
+}
+
+/* Table styles within the receipt */
+.receipt-container table {
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: 10px;
+  table-layout: fixed; /* Prevent cell resizing */
+}
+
+.receipt-container th, .receipt-container td {
+  border-bottom: 1px dashed black; /* Dashed border for receipt feel */
+  padding: 3px 5px; /* Reduced padding for compactness */
+  text-align: left;
+  overflow-wrap: break-word; /* Allow long words to break */
+  word-wrap: break-word; /* Support for older browsers */
+  hyphens: auto; /* Optional: allow hyphenation for better word breaking */
+}
+
+.receipt-container th {
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px solid black;
+}
+
+.receipt-container td {
+  text-align: center; /* Center content in table cells */
+}
+
+/* Total section */
+.receipt-container .total {
+  text-align: right;
+  font-weight: bold;
+  padding: 10px;
+  border-top: 1px solid black;
+}
+
+/* Footer */
+.receipt-container .receipt-footer {
+  margin-top: -10px;
+  font-size: 12px;
+}
+
+@media print {
+  .receipt-container {
+      border: 1px solid black; /* Keep the border in print */
+      margin: 0;
+  }
+}

@@ -27,31 +27,9 @@
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
   <link href="assets/css/style.css" rel="stylesheet">
-<style>
-  .card-custom {
-      background-color: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-      text-align: center;
-    }
-    .icon-bg {
-      background-color: #2d1f6d;
-      color: white;
-      border-radius: 50%;
-      padding: 15px;
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-    .card-title {
-      font-size: 1.2rem;
-      color: #6c757d;
-    }
-    .value {
-      font-size: 2.5rem;
-      font-weight: bold;
-    }
-</style>
+  <style>
+    
+  </style>
 </head>
 
 <body>
@@ -66,6 +44,12 @@
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center">
+        <input type="text" id="productName" placeholder="Search by Product Name, Id" title="Enter search keyword">
+      </form>
+    </div><!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -82,12 +66,12 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="assets/profile_pic.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2 text-white"  id="agent-name"></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2" id="agent-name"></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6 id="name2"></h6>
+                <h6 id="name2"></h6>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -126,7 +110,7 @@
       <li class="nav-item">
         <a class="nav-link " href="index.html">
           <i class="bi bi-grid"></i>
-          <span>Index</span>
+          <span>Home</span>
         </a>
       </li>
      
@@ -175,154 +159,75 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Users</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Users</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-      <div class="row">
-        <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Products</h5>
-          <div class="value" id="totalProduct"></div>
+    <section class="section dashboard profile">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addUser"><i class="bi bi-person-plus"></i> Add User</button>
+            </div>
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Product Items</h5>
-          <div class="value" id="totalProductItem"></div>
+        <div class="row user-container">
+            
         </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Products In Stock</h5>
-          <div class="value" id="totalProductInStock"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Products out of Stock</h5>
-          <div class="value" id="totalProductOutOfStock"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Users</h5>
-          <div class="value" id="totalUser"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Product Price</h5>
-          <div class="value" id="totalProductPrice"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Products Sold Price</h5>
-          <div class="value" id="totalProductSoldPrice"></div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="card card-custom">
-          <!-- Bootstrap Icon -->
-          <div class="icon-bg mx-auto">
-            <i class="bi bi-arrow-up-right-square"></i>
-          </div>
-          <h5 class="card-title">Total Sales</h5>
-          <div class="value" id="totalSales"></div>
-        </div>
-      </div>
-
-
-
-      <div class="row mt-5">
-        <div class="col-lg-6">
-          <div class="card info-card sales-card">
-            <div class="card-body">
-              <h5 class="card-title">Recent Product <span>| Items</span></h5>
-                <div class="table-responsive">
-                  <table class="table table-striped" style="font-size: 12px;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Product</th>
-                            <th scope="col">In Stock</th>
-                            <th scope="col">Price (₦)</th>
-                            <th scope="col">CreatedAt</th>
-                        </tr>
-                    </thead>
-                    <tbody class="product-table">
-                       
-                    </tbody>
-
-                </table>
+       
+        <div class="modal fade" id="addUser" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Add Product</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                  <form  class="row g-3 needs-validation" id="addUser-form" novalidate>
+                    <div class="col-12">
+                      <div class="input-group has-validation">
+                        <input type="text" name="name" class="form-control" id="yourUsername" 
+                        placeholder="Enter Name" required>
+                        <div class="invalid-feedback">Please enter Name.</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-group has-validation">
+                          <input type="text" name="username" class="form-control" id="yourUsername" 
+                          placeholder="Enter Username" required>
+                          <div class="invalid-feedback">Please enter Username</div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="input-group has-validation">
+                          <input type="text" name="question" class="form-control" id="yourUsername" 
+                          placeholder="Enter Security Question" required>
+                          <div class="invalid-feedback">Please enter Question</div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="input-group has-validation">
+                          <input type="text" name="answer" class="form-control" id="yourUsername" 
+                          placeholder="Enter Answer" required>
+                          <div class="invalid-feedback">Please enter Answer</div>
+                        </div>
+                      </div>
+      
+                  
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-10" type="submit"><span class="" id="submit-text">Submit <i class="bi bi-arrow-right"></i>
+                    </span> <div id="spinner" class="spinner-border text-white d-none"></div></button>
+                  </div>
+                </form>
+                </div>
+                
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="card ">
-            <div class="card-body">
-              <h5 class="card-title">Recent Sold Product <span>| Items</span></h5>
-                <div class="table-responsive">
-                  <table class="table table-striped" style="font-size: 12px;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Sale Agent</th>
-                            <th scope="col">Customer Name</th>
-                            <th scope="col">Total Price</th>
-                            <th scope="col">CreatedAt</th>
-                        </tr>
-                    </thead>
-                    <tbody class="cart-table">
-                       
-                    </tbody>
-                </table>
-                </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-
-      </div>
-    </section>
+      </section>
 
   </main><!-- End #main -->
 
@@ -332,8 +237,6 @@
   <div class="alert alert-success fade show d-none" id="success-alert">
     <strong>Success! </strong> <span id="success-message"></span>
   </div>
-
-
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -355,7 +258,8 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/dashboard.js"></script>
+  <script src="assets/js/users.js"></script>
+
 </body>
 
 </html>

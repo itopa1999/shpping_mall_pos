@@ -66,6 +66,10 @@ namespace Backend.Dtos
         public string? Name { get; set; }
         [Required]
         public string? UserName { get; set; }
+        [Required]
+        public string? Question { get; set; }
+        [Required]
+        public string? Answer { get; set; }
     }
 
 
