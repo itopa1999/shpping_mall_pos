@@ -22,7 +22,7 @@ namespace Backend.Dtos
 
     }
 
-     public class UserLoginDto
+    public class UserLoginDto
     {
         [Required]
         public string? Username { get; set; }

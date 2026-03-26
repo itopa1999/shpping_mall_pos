@@ -5,6 +5,7 @@ using Backend.Interfaces;
 using Backend.Models;
 using Backend.Repository;
 using Backend.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -109,9 +110,13 @@ builder.Services.AddAuthentication(options => {
 
 //database
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
 });
 //database
+
+builder.Services.AddHangfire(config => 
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DatabaseConnection")));
+builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IJWTService, JWTServices>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
@@ -127,12 +132,9 @@ builder.Services.AddCors(options =>
 });
 
 
-
-
-
-
-
 var app = builder.Build();
+
+app.UseHangfireDashboard();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -140,6 +142,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 app.UseHttpsRedirection();
 
